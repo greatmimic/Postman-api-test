@@ -1,6 +1,6 @@
 # ReqRes Postman API Portfolio
  
-API testing collection built with Postman, using [ReqRes](https://reqres.in) as a real hosted backend. Tests cover a full CRUD workflow on a `products` collection.
+API testing collections built with Postman, covering CRUD operations and country data queries. Uses [ReqRes](https://reqres.in) as a real hosted backend and [RestCountries](https://restcountries.com) as a public REST API.
  
 ---
  
