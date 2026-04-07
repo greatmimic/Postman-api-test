@@ -1,0 +1,310 @@
+{
+  "info": {
+    "_postman_id": "8f9e309f-c9c1-4a1f-9d5b-132293c5f905",
+    "name": "RestCountry",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53507670",
+    "_collection_link": "https://go.postman.co/collection/53507670-8f9e309f-c9c1-4a1f-9d5b-132293c5f905?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get all countries",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "\r",
+              "pm.test('Status is 200', () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response is an array', () => {\r",
+              "    pm.expect(json).to.be.an('array');\r",
+              "});\r",
+              "\r",
+              "pm.test('Array is not empty and contains more than one country', () => {\r",
+              "    pm.expect(json.length).to.be.greaterThan(1);\r",
+              "});\r",
+              "\r",
+              "pm.test('Each country has all pulled fields', () => {\r",
+              "    json.forEach((country) => {\r",
+              "        pm.expect(country).to.have.property('name');\r",
+              "        pm.expect(country).to.have.property('capital');\r",
+              "        pm.expect(country).to.have.property('population');\r",
+              "        pm.expect(country).to.have.property('currencies');\r",
+              "        pm.expect(country).to.have.property('region');\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "pm.test('Population is positive and integer', () => {\r",
+              "    json.forEach((country) => {\r",
+              "        pm.expect(country.population).to.be.a(\"number\").and.to.be.greaterThan(0);\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "// set random country as env variable\r",
+              "const randomIndex = Math.floor(Math.random()*json.length);\r",
+              "const randomCountry = json[randomIndex].name.common.toLowerCase();\r",
+              "\r",
+              "pm.environment.set(\"country_name\", randomCountry);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{countries_url}}/all?fields=name,capital,population,region,currencies",
+          "host": [
+            "{{countries_url}}"
+          ],
+          "path": [
+            "all"
+          ],
+          "query": [
+            {
+              "key": "fields",
+              "value": "name,capital,population,region,currencies"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get by country name",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "const country = json[0]; // response is an object\r",
+              "\r",
+              "\r",
+              "pm.test('Status is 200', () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response is array', () => {\r",
+              "    pm.expect(json).to.be.an('array');\r",
+              "});\r",
+              "\r",
+              "pm.test('Country name returned equals {{country_name}}', () => {\r",
+              "    pm.expect(country.name.common.toLowerCase()).to.eql(pm.environment.get('country_name'));\r",
+              "});\r",
+              "\r",
+              "pm.test('Country has capital', () => {\r",
+              "    pm.expect(country).to.have.property('capital');\r",
+              "});\r",
+              "\r",
+              "pm.test('Country has valid population', () => {\r",
+              "    pm.expect(country.population).to.be.a('number').and.to.be.greaterThan(0);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{countries_url}}/name/{{country_name}}",
+          "host": [
+            "{{countries_url}}"
+          ],
+          "path": [
+            "name",
+            "{{country_name}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get country by region",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "\r",
+              "pm.test('Status is 200', () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response is array', () => {\r",
+              "    pm.expect(json).to.be.an('array');\r",
+              "});\r",
+              "\r",
+              "pm.test('All countries are from the requested region', () => {\r",
+              "    json.forEach((country) => {\r",
+              "        pm.expect(country.region.toLowerCase()).to.eql(pm.environment.get('region'));\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "pm.test('Response contains population and name', () => {\r",
+              "    json.forEach((country) => {\r",
+              "        pm.expect(country).to.have.property('name');\r",
+              "        pm.expect(country.population).to.be.a('number').and.to.be.greaterThan(0);\r",
+              "    })\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{countries_url}}/region/{{region}}/?fields=name,population,capital,currencies,region",
+          "host": [
+            "{{countries_url}}"
+          ],
+          "path": [
+            "region",
+            "{{region}}",
+            ""
+          ],
+          "query": [
+            {
+              "key": "fields",
+              "value": "name,population,capital,currencies,region"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Filter country by currency",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "\r",
+              "pm.test('Status is 200', () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response returns array', () => {\r",
+              "    pm.expect(json).to.be.an('array');\r",
+              "});\r",
+              "\r",
+              "pm.test('Countries have currency field', () => {\r",
+              "    json.forEach((country) => {\r",
+              "        pm.expect(country).to.have.property('currencies');\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "pm.test('Countries have name', () => {\r",
+              "    json.forEach((country) => {\r",
+              "        pm.expect(country).to.have.property('name');\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "pm.test('Requested currency is present in countries', () => {\r",
+              "    json.forEach((country) => {\r",
+              "        //currency returns object so take key\r",
+              "        const currencyKey = Object.keys(country.currencies); //should return \"USD\"\r",
+              "        //include instead of eql since currencyKey is array and env currency is string\r",
+              "        pm.expect(currencyKey).to.be.include(pm.environment.get('currency').toUpperCase())\r",
+              "    \r",
+              "    })\r",
+              "});\r",
+              "\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{countries_url}}/currency/{{currency}}/?fields=name,currencies",
+          "host": [
+            "{{countries_url}}"
+          ],
+          "path": [
+            "currency",
+            "{{currency}}",
+            ""
+          ],
+          "query": [
+            {
+              "key": "fields",
+              "value": "name,currencies"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get by invalid country name",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "//test assumes a status 404\r",
+              "const json = pm.response.json();\r",
+              "\r",
+              "pm.test('Status code is 404', () => {\r",
+              "    pm.response.to.have.status(404);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response contains error status', () => {\r",
+              "    pm.expect(json).to.have.property('status');\r",
+              "    pm.expect(json.status).to.eql(404);\r",
+              "});\r",
+              "\r",
+              "pm.test('Response contains error message', () => {\r",
+              "    pm.expect(json).to.have.property('message');\r",
+              "    pm.expect(json.message).to.a('string');\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{countries_url}}/name/{{invalid_country_name}}",
+          "host": [
+            "{{countries_url}}"
+          ],
+          "path": [
+            "name",
+            "{{invalid_country_name}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
