@@ -44,3 +44,54 @@ API testing collection built with Postman, using [ReqRes](https://reqres.in) as 
 - Response data matches the request body (`name`, `price`, `category`, `in_stock`)
  
 ---
+
+## RestCountry — Country Data
+ 
+Read-only queries against the RestCountries public API, including a negative test case for invalid input.
+ 
+### Requests
+ 
+| Request | Method | Endpoint |
+|---|---|---|
+| Get all countries | GET | `/all?fields=name,capital,population,region,currencies` |
+| Get by country name | GET | `/name/{{country_name}}` |
+| Get country by region | GET | `/region/{{region}}?fields=name,population,capital,currencies,region` |
+| Filter country by currency | GET | `/currency/{{currency}}?fields=name,currencies` |
+| Get by invalid country name | GET | `/name/{{invalid_country_name}}` |
+ 
+### Tests
+ 
+**Get all countries**
+- Status is 200
+- Response is an array
+- Array contains more than one country
+- Each country has `name`, `capital`, `population`, `currencies`, `region`
+- Each population is a positive number
+- Sets a random country name to `{{country_name}}` environment variable automatically
+ 
+**Get by country name**
+- Status is 200
+- Response is an array
+- Country name returned matches `{{country_name}}`
+- Country has a capital
+- Country has a valid population (number greater than 0)
+ 
+**Get country by region**
+- Status is 200
+- Response is an array
+- All countries belong to the requested `{{region}}`
+- Each country has `name` and a valid population
+ 
+**Filter country by currency**
+- Status is 200
+- Response is an array
+- Each country has a `currencies` field
+- Each country has a `name` field
+- Each country's currency keys include the requested `{{currency}}`
+ 
+**Get by invalid country name** *(negative test)*
+- Status is 404
+- Response contains an error `status` field equal to 404
+- Response contains an error `message` field (string)
+ 
+---
