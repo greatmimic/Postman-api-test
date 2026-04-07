@@ -1,0 +1,335 @@
+{
+  "info": {
+    "_postman_id": "3cbf610b-aa33-40c2-8ed3-df6d6ea8393c",
+    "name": "ReqRes",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53507670",
+    "_collection_link": "https://go.postman.co/collection/53507670-3cbf610b-aa33-40c2-8ed3-df6d6ea8393c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get full list of products",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "const data = json.data;\r",
+              "\r",
+              "pm.test(\"Status is 200\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "})\r",
+              "\r",
+              "pm.test(\"Response is made of array\", () => {\r",
+              "    pm.expect(data).to.be.an('array');\r",
+              "})\r",
+              "\r",
+              "pm.test(\"Array contains at least one item\", () => {\r",
+              "    pm.expect(data.length).greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Each item has id, created_by, name, price, category, in_stock\", () => {\r",
+              "    data.forEach((item) => {\r",
+              "        pm.expect(item).to.have.property('id');\r",
+              "        pm.expect(item.id).to.be.a('string');\r",
+              "        pm.expect(item).to.have.property('created_by');\r",
+              "        pm.expect(item.created_by).to.be.a('number');\r",
+              "        pm.expect(item).to.have.property('data');\r",
+              "        pm.expect(item.data).to.be.an('object');\r",
+              "        pm.expect(item.data).to.have.property('name');\r",
+              "        pm.expect(item.data.name).to.be.a('string');\r",
+              "        pm.expect(item.data).to.have.property('price');\r",
+              "        pm.expect(item.data.price).to.be.a('number');\r",
+              "        pm.expect(item.data.price).greaterThan(0);\r",
+              "        pm.expect(item.data).to.have.property('category');\r",
+              "        pm.expect(item.data.category).to.be.a('string');\r",
+              "        pm.expect(item.data).to.have.property('in_stock');\r",
+              "        pm.expect(item.data.in_stock).to.be.a('boolean');\r",
+              "        });\r",
+              "\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/collections/{{collection}}/records?project_id={{project_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "collections",
+            "{{collection}}",
+            "records"
+          ],
+          "query": [
+            {
+              "key": "project_id",
+              "value": "{{project_id}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get single product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();\r",
+              "const id = response.data.id;\r",
+              "\r",
+              "pm.test(\"Status code is 200\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Check if id matches\", () => {\r",
+              "    pm.expect(id).to.eql(pm.environment.get(\"id\"));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Check if all fields are present\", () => {\r",
+              "    pm.expect(response.data).to.have.property(\"id\");\r",
+              "    pm.expect(response.data).to.have.property(\"collection_id\");\r",
+              "    pm.expect(response.data).to.have.property(\"project_id\");\r",
+              "    pm.expect(response.data).to.have.property(\"app_user_id\");\r",
+              "    pm.expect(response.data).to.have.property(\"created_by\");\r",
+              "    pm.expect(response.data).to.have.property(\"created_at\");\r",
+              "    pm.expect(response.data).to.have.property(\"updated_at\");\r",
+              "    pm.expect(response.data).to.have.property(\"deleted_at\");\r",
+              "    pm.expect(response.data).to.have.property(\"data\");\r",
+              "    pm.expect(response.data.data).to.have.property(\"name\");\r",
+              "    pm.expect(response.data.data).to.have.property(\"price\");\r",
+              "    pm.expect(response.data.data).to.have.property(\"category\");\r",
+              "    pm.expect(response.data.data).to.have.property(\"in_stock\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/collections/{{collection}}/records/{{id}}?project_id={{project_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "collections",
+            "{{collection}}",
+            "records",
+            "{{id}}"
+          ],
+          "query": [
+            {
+              "key": "project_id",
+              "value": "{{project_id}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add product",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"data\": {\r\n        \"name\": \"New Product 3\",\r\n        \"price\": 33,\r\n        \"category\": \"Entertainment\",\r\n        \"in_stock\": true\r\n    }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/collections/{{collection}}/records?{{project_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "collections",
+            "{{collection}}",
+            "records"
+          ],
+          "query": [
+            {
+              "key": "{{project_id}}",
+              "value": null
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update product",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"data\": {\r\n        \"name\": \"New Product\",\r\n        \"price\": 399.99,\r\n        \"category\": \"Entertainment\",\r\n        \"in_stock\": true\r\n    }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/collections/{{collection}}/records/{{id}}?{{project_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "collections",
+            "{{collection}}",
+            "records",
+            "{{id}}"
+          ],
+          "query": [
+            {
+              "key": "{{project_id}}",
+              "value": null
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete product",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/collections/{{collection}}/records/:id?{{project_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "collections",
+            "{{collection}}",
+            "records",
+            ":id"
+          ],
+          "query": [
+            {
+              "key": "{{project_id}}",
+              "value": null
+            }
+          ],
+          "variable": [
+            {
+              "key": "id",
+              "value": "2d2d8faf-8060-4691-b2ce-d5989355bb29"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
